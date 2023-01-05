@@ -7,12 +7,15 @@ exports.signup = (req, res) => {
   const result = userData
     .save()
     .then(() => {
-      console.log("new user added");
+      res.send("successfully user added");
     })
     .catch((err) => {
-      console.log("error while saving to DB\n", err);
+      if (err.code == 11000) {
+        res.status(409).send("user already exist");
+      } else {
+        res.status(400).send(err);
+      }
     });
-  res.send("successfully user added");
 };
 
 exports.signin = (req, res) => {
